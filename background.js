@@ -1,7 +1,8 @@
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.sync.set({
     enabled: true,
-    mode: "vowels", // "vowels" | "first-letter"
+    boldVowels: true,
+    boldFirstLetter: false,
     intensity: 700
   });
 });

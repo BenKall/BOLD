@@ -1,29 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8" />
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-  <h3>Bold Reading</h3>
 
-  <label>
-    <input type="checkbox" id="toggle">
-    Enabled
-  </label>
 
-  <hr>
+<h3>Reading Boost</h3>
 
-  <label>Mode</label>
-  <select id="mode">
-    <option value="vowels">Vowels</option>
-    <option value="first-letter">First Letter</option>
-  </select>
+<label>
+  <input type="checkbox" id="enabled">
+  Enabled
+</label>
 
-  <hr>
+<hr>
 
-  <label>Bold Intensity</label>
+<label>
+  <input type="checkbox" id="boldVowels">
+  Vowels
+</label>
+
+<label>
+  <input type="checkbox" id="boldFirstLetter">
+  First
+</label>
+
+<hr>
+
+<label>
+  Intensity
   <input type="range" min="400" max="900" step="100" id="intensity">
-
-  <script src="popup.js"></script>
-</body>
-</html>
+</label>

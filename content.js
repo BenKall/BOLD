@@ -1,4 +1,5 @@
 const STYLE_ID = "bold-reading-style";
+const MARKER_ATTR = "data-reading-boost";
 
 function injectStyle(weight) {
   let style = document.getElementById(STYLE_ID);
@@ -19,6 +20,8 @@ function shouldSkipNode(node) {
   const parent = node.parentNode;
   if (!parent) return true;
 
+  if (parent.hasAttribute?.(MARKER_ATTR)) return true;
+
   const tag = parent.nodeName;
   return (
     tag === "SCRIPT" ||
@@ -31,20 +34,30 @@ function shouldSkipNode(node) {
   );
 }
 
-function transformText(text, mode) {
-  if (mode === "vowels") {
-    return text.replace(/[aeiouAEIOU]/g, m =>
+function resetPage() {
+  document
+    .querySelectorAll(`[${MARKER_ATTR}]`)
+    .forEach(el => {
+      el.replaceWith(document.createTextNode(el.textContent));
+    });
+}
+
+function transformText(text, settings) {
+  let result = text;
+
+  if (settings.boldFirstLetter) {
+    result = result.replace(/\b([a-zA-Z])/g, m =>
       `<span class="bold-reading">${m}</span>`
     );
   }
 
-  if (mode === "first-letter") {
-    return text.replace(/\b([a-zA-Z])/g, m =>
+  if (settings.boldVowels) {
+    result = result.replace(/[aeiouAEIOU]/g, m =>
       `<span class="bold-reading">${m}</span>`
     );
   }
 
-  return text;
+  return result;
 }
 
 function processPage(settings) {
@@ -68,19 +81,36 @@ function processPage(settings) {
     const text = textNode.nodeValue;
     if (!text) return;
 
+    if (!settings.enabled) return;
+
     const span = document.createElement("span");
-    span.innerHTML = settings.enabled
-      ? transformText(text, settings.mode)
-      : text;
+    span.setAttribute(MARKER_ATTR, "true");
+    span.innerHTML = transformText(text, settings);
 
     textNode.parentNode.replaceChild(span, textNode);
+
   });
 }
 
 function applySettings() {
-  chrome.storage.sync.get(["enabled", "mode", "intensity"], settings => {
-    processPage(settings);
-  });
+  chrome.storage.sync.get(
+    {
+      enabled: true,
+      boldVowels: true,
+      boldFirstLetter: true,
+      intensity: 700
+    },
+    settings => {
+      injectStyle(settings.intensity);
+
+      if (!settings.enabled) {
+        resetPage();
+        return;
+      }
+
+      processPage(settings);
+    }
+  );
 }
 
 applySettings();
