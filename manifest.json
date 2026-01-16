@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Bold Vowels",
+  "name": "Bold Reader",
   "description": "Makes all vowels bold to improve reading speed",
   "version": "1.0",
   "icons": {
