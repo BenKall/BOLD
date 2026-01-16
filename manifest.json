@@ -1,10 +1,14 @@
 {
   "manifest_version": 3,
   "name": "Bold Reader",
-  "description": "Makes all vowels bold to improve reading speed",
-  "version": "1.0",
-  "icons": {
-    "128": "icon.png"
+  "description": "Toggle bold vowels or first letters to improve reading speed",
+  "version": "2.0",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
   },
   "content_scripts": [
     {
